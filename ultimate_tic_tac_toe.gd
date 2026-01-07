@@ -7,7 +7,7 @@ var win_count_x = 0
 var win_count_o = 0
 var who_turn = 'x'
 var focused_board = 0
-
+var last_move = ""
 
 var color0 = Color(0.275, 0.0, 0.0, 1.0)
 var color0_focused = Color(0.104, 0.0, 0.0, 1.0)
@@ -179,6 +179,7 @@ func move(button, x, y) -> void:
 			field_o.set_bit(x, y, true)
 			button.add_theme_color_override("font_color", Color.GREEN)
 		button.text = who_turn
+		last_move = "abcdefghi"[x] + str(9-y)
 		
 		#handle result
 		var board_result = check_win_condition(board_number)
@@ -275,7 +276,7 @@ func update_KEN() -> String:
 		if j < 8:
 			line += "-"
 		count_empty_spaces = 0
-	
+	line += " " + str(last_move)
 	return line
 
 func update_win_count() -> void:
