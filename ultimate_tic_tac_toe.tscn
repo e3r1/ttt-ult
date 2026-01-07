@@ -98,9 +98,10 @@ text = "KEN: "
 [node name="value" type="Label" parent="label_KEN"]
 layout_mode = 0
 offset_left = 38.0
-offset_right = 79.0
-offset_bottom = 23.0
+offset_right = 236.0
+offset_bottom = 140.0
 text = "123"
+autowrap_mode = 1
 
 [connection signal="pressed" from="btn_who_turn" to="." method="change_turn"]
 [connection signal="pressed" from="btn_clear" to="." method="_on_btn_clear_pressed"]

@@ -191,6 +191,7 @@ func move(button, x, y) -> void:
 			boards_winner[board_number] = "o"
 			win_count_o += 1
 		update_win_count()
+		$label_KEN/value.text = update_KEN()
 		
 		#prepare to next move
 		change_turn()
@@ -225,6 +226,7 @@ func _on_btn_clear_pressed() -> void:
 			boards_color[i][j] = bg_color
 	select_color_on_focused_board(2)
 	update_win_count()
+	$label_KEN/value.text = update_KEN()
 
 func remove_focus_on_board(i: int) -> void:
 	var board_color = boards_color[i/3][i%3]
@@ -251,8 +253,30 @@ func select_color_on_focused_board(board_color: int) -> void:
 	change_bg_color(board_number, bg_color)
 
 func update_KEN() -> String:
+	var count_empty_spaces = 0
+	var line = ""
 	
-	return ""
+	for j in range(9):
+		for i in range(9):
+			var j_reverse = 8 - j
+			var x = field_x.get_bit(i, j_reverse)
+			var o = field_o.get_bit(i, j_reverse)
+			if x:
+				line += "x"
+				count_empty_spaces = 0
+			else: if o:
+				line += "o"
+				count_empty_spaces = 0
+			else:
+				count_empty_spaces += 1
+				if !count_empty_spaces == 1:
+					line = line.rstrip("0123456789")
+				line += str(count_empty_spaces)
+		if j < 8:
+			line += "-"
+		count_empty_spaces = 0
+	
+	return line
 
 func update_win_count() -> void:
 	$label_x_win_count.text = "X won " + str(win_count_x) + " times"
