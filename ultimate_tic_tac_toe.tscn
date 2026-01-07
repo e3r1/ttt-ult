@@ -1,0 +1,107 @@
+[gd_scene load_steps=2 format=3 uid="uid://b0c2co27dsveq"]
+
+[ext_resource type="Script" uid="uid://dfo0kl18rf2fv" path="res://ttt-ult/ultimate_tic_tac_toe.gd" id="1_c4ely"]
+
+[node name="Ultimate_Tic_Tac_Toe" type="Node2D"]
+script = ExtResource("1_c4ely")
+
+[node name="game_grid" type="GridContainer" parent="."]
+z_index = 2
+z_as_relative = false
+offset_left = 62.0
+offset_top = 40.0
+offset_right = 632.0
+offset_bottom = 512.0
+columns = 3
+
+[node name="btn_who_turn" type="Button" parent="."]
+offset_left = 900.0
+offset_top = 50.0
+offset_right = 1000.0
+offset_bottom = 90.0
+text = "x"
+
+[node name="btn_clear" type="Button" parent="."]
+offset_left = 1040.0
+offset_top = 50.0
+offset_right = 1140.0
+offset_bottom = 90.0
+text = "Clear all"
+
+[node name="label_result" type="Label" parent="."]
+offset_left = 900.0
+offset_top = 200.0
+offset_right = 1132.0
+offset_bottom = 228.0
+text = "Game in process"
+horizontal_alignment = 1
+
+[node name="list_board_color" type="ItemList" parent="."]
+offset_left = 1040.0
+offset_top = 100.0
+offset_right = 1140.0
+offset_bottom = 190.0
+auto_height = true
+item_count = 3
+item_0/text = "X"
+item_0/selectable = false
+item_1/text = "O"
+item_1/selectable = false
+item_2/text = "Default"
+item_2/selectable = false
+
+[node name="option_board_number" type="OptionButton" parent="."]
+offset_left = 900.0
+offset_top = 100.0
+offset_right = 1000.0
+offset_bottom = 140.0
+button_mask = 0
+fit_to_longest_item = false
+
+[node name="label_next_board" type="Label" parent="."]
+offset_left = 900.0
+offset_top = 164.0
+offset_right = 998.0
+offset_bottom = 202.0
+text = "Next board:"
+
+[node name="label_value" type="Label" parent="label_next_board"]
+layout_mode = 0
+offset_left = 98.0
+offset_right = 138.0
+offset_bottom = 23.0
+text = "any"
+
+[node name="label_x_win_count" type="Label" parent="."]
+offset_left = 900.0
+offset_top = 15.0
+offset_right = 1008.0
+offset_bottom = 38.0
+theme_override_colors/font_color = Color(0.9793777, 0.29307708, 0.3401958, 1)
+text = "X won 0 times"
+
+[node name="label_o_win_count" type="Label" parent="."]
+offset_left = 1030.0
+offset_top = 15.0
+offset_right = 1141.0
+offset_bottom = 38.0
+theme_override_colors/font_color = Color(1.5883148e-06, 0.67920566, 0.30019248, 1)
+text = "O won 0 times"
+
+[node name="label_KEN" type="Label" parent="."]
+offset_left = 902.0
+offset_top = 231.0
+offset_right = 943.0
+offset_bottom = 254.0
+text = "KEN: "
+
+[node name="value" type="Label" parent="label_KEN"]
+layout_mode = 0
+offset_left = 38.0
+offset_right = 79.0
+offset_bottom = 23.0
+text = "123"
+
+[connection signal="pressed" from="btn_who_turn" to="." method="change_turn"]
+[connection signal="pressed" from="btn_clear" to="." method="_on_btn_clear_pressed"]
+[connection signal="item_selected" from="list_board_color" to="." method="select_color_on_board"]
