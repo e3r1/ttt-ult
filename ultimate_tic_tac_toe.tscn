@@ -8,16 +8,16 @@ script = ExtResource("1_c4ely")
 [node name="game_grid" type="GridContainer" parent="."]
 z_index = 2
 z_as_relative = false
-offset_left = 62.0
-offset_top = 40.0
-offset_right = 632.0
-offset_bottom = 512.0
+offset_left = 36.0
+offset_top = 17.0
+offset_right = 523.0
+offset_bottom = 522.0
 columns = 3
 
 [node name="btn_who_turn" type="Button" parent="."]
-offset_left = 900.0
+offset_left = 901.0
 offset_top = 50.0
-offset_right = 1000.0
+offset_right = 1001.0
 offset_bottom = 90.0
 text = "x"
 
@@ -29,9 +29,9 @@ offset_bottom = 90.0
 text = "Clear all"
 
 [node name="label_result" type="Label" parent="."]
-offset_left = 900.0
+offset_left = 782.0
 offset_top = 200.0
-offset_right = 1132.0
+offset_right = 1139.0
 offset_bottom = 228.0
 text = "Game in process"
 horizontal_alignment = 1
@@ -51,31 +51,32 @@ item_2/text = "Default"
 item_2/selectable = false
 
 [node name="option_board_number" type="OptionButton" parent="."]
-offset_left = 900.0
-offset_top = 100.0
-offset_right = 1000.0
-offset_bottom = 140.0
+offset_left = 901.0
+offset_top = 101.0
+offset_right = 1001.0
+offset_bottom = 141.0
 button_mask = 0
 fit_to_longest_item = false
 
 [node name="label_next_board" type="Label" parent="."]
-offset_left = 900.0
-offset_top = 164.0
-offset_right = 998.0
-offset_bottom = 202.0
+offset_left = 792.0
+offset_top = 16.0
+offset_right = 890.0
+offset_bottom = 54.0
 text = "Next board:"
 
 [node name="label_value" type="Label" parent="label_next_board"]
 layout_mode = 0
-offset_left = 98.0
-offset_right = 138.0
-offset_bottom = 23.0
+offset_left = 30.0
+offset_top = 19.0
+offset_right = 70.0
+offset_bottom = 42.0
 text = "any"
 
 [node name="label_x_win_count" type="Label" parent="."]
-offset_left = 900.0
+offset_left = 899.0
 offset_top = 15.0
-offset_right = 1008.0
+offset_right = 1007.0
 offset_bottom = 38.0
 theme_override_colors/font_color = Color(0.9793777, 0.29307708, 0.3401958, 1)
 text = "X won 0 times"
@@ -89,20 +90,36 @@ theme_override_colors/font_color = Color(1.5883148e-06, 0.67920566, 0.30019248, 
 text = "O won 0 times"
 
 [node name="label_KEN" type="Label" parent="."]
-offset_left = 902.0
-offset_top = 231.0
-offset_right = 943.0
-offset_bottom = 254.0
+offset_left = 742.0
+offset_top = 223.0
+offset_right = 783.0
+offset_bottom = 246.0
 text = "KEN: "
 
-[node name="value" type="Label" parent="label_KEN"]
+[node name="value" type="TextEdit" parent="label_KEN"]
 layout_mode = 0
-offset_left = 38.0
-offset_right = 236.0
-offset_bottom = 140.0
-text = "123"
-autowrap_mode = 1
+offset_left = 40.0
+offset_top = 7.0
+offset_right = 398.0
+offset_bottom = 98.0
+editable = false
+wrap_mode = 1
+
+[node name="textEdit_import_KEN" type="TextEdit" parent="."]
+offset_left = 782.0
+offset_top = 334.0
+offset_right = 1140.0
+offset_bottom = 434.0
+wrap_mode = 1
+
+[node name="btn_import_KEN" type="Button" parent="."]
+offset_left = 916.0
+offset_top = 438.0
+offset_right = 1013.0
+offset_bottom = 469.0
+text = "Import KEN"
 
 [connection signal="pressed" from="btn_who_turn" to="." method="change_turn"]
-[connection signal="pressed" from="btn_clear" to="." method="_on_btn_clear_pressed"]
+[connection signal="pressed" from="btn_clear" to="." method="clear_all"]
 [connection signal="item_selected" from="list_board_color" to="." method="select_color_on_board"]
+[connection signal="pressed" from="btn_import_KEN" to="." method="import_KEN"]
