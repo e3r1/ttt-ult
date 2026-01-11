@@ -1,8 +1,9 @@
 extends Node2D
 var field_x = BitMap.new()
 var field_o = BitMap.new()
+var boards_winner_x = []
+var boards_winner_o = []
 var boards_color = []
-var boards_winner = []
 var win_count_x = 0
 var win_count_o = 0
 var who_turn = 'x'
@@ -23,7 +24,6 @@ func _ready() -> void:
 	style.bg_color = color2
 	field_x.create(Vector2i(9,9))
 	field_o.create(Vector2i(9,9))
-	boards_winner.resize(9)
 	
 	for n in range(9):
 		var grid = GridContainer.new()
@@ -41,6 +41,8 @@ func _ready() -> void:
 				grid.add_child(button)
 		$game_grid.add_child(grid)
 		
+		boards_winner_x.append(false)
+		boards_winner_o.append(false)
 		boards_color.append(color2)
 		$option_board_number.add_item(str(n))
 	
@@ -50,7 +52,7 @@ func _ready() -> void:
 #func _process(delta: float) -> void:
 #	pass
 
-func check_win_condition(board_number: int) -> String:
+func check_win_condition_local(board_number: int) -> String:
 	var fx = []
 	var fo = []
 	
@@ -58,22 +60,21 @@ func check_win_condition(board_number: int) -> String:
 		fx.append(field_x.get_bit(i, board_number))
 		fo.append(field_o.get_bit(i, board_number))
 	
-	var s = fx
-	for i in range(9):
-		if ((s[0]&&s[1]&&s[2]) || (s[3]&&s[4]&&s[5]) || (s[6]&&s[7]&&s[8]) ||
-		(s[0]&&s[3]&&s[6]) || (s[1]&&s[4]&&s[7]) || (s[2]&&s[5]&&s[8])) ||(
-		(s[0]&&s[4]&&s[8]) || (s[2]&&s[4]&&s[6])):
-			return "x"
-	s = fo
-	for i in range(9):
-		if ((s[0]&&s[1]&&s[2]) || (s[3]&&s[4]&&s[5]) || (s[6]&&s[7]&&s[8]) ||
-		(s[0]&&s[3]&&s[6]) || (s[1]&&s[4]&&s[7]) || (s[2]&&s[5]&&s[8])) ||(
-		(s[0]&&s[4]&&s[8]) || (s[2]&&s[4]&&s[6])):
-			return "o"
+	if has_array_winning_configuration(fx):
+		return "x"
+	else: if has_array_winning_configuration(fo):
+		return "o"
 	
 	if check_full_board(board_number):
 		return "draw"
 	
+	return "playing"
+
+func check_win_condition_global() -> String:
+	if has_array_winning_configuration(boards_winner_x):
+		return "x"
+	else: if has_array_winning_configuration(boards_winner_o):
+		return "o"
 	return "playing"
 
 func check_full_board(board_number: int) -> bool:
@@ -94,10 +95,6 @@ func change_turn() -> void:
 func clear_all() -> void:
 	$label_next_board/label_value.text = "any"
 	$label_result.text = "Game in process"
-	boards_winner.clear()
-	boards_winner.resize(9)
-	win_count_x = 0
-	win_count_o = 0
 	field_x.create(Vector2i(9,9))
 	field_o.create(Vector2i(9,9))
 	last_move = ""
@@ -112,8 +109,9 @@ func clear_all() -> void:
 			button.add_theme_stylebox_override("normal", style)
 			
 	for n in range(9):
+		boards_winner_x[n] = false
+		boards_winner_o[n] = false
 		boards_color[n] = bg_color
-	print_win_count()
 	print_KEN()
 
 func click_button(board_number, local_n) -> void:
@@ -122,10 +120,14 @@ func click_button(board_number, local_n) -> void:
 	var global_position = board_number * 9 + local_n
 	var global_x = global_position%9
 	var global_y = global_position/9
+	var board_x = board_number%3
+	var board_y = board_number/3
+	var next_board_str = $label_next_board/label_value.text
+	
 	var is_button_empty = !(field_x.get_bit(global_x, global_y) || field_o.get_bit(global_x, global_y))
-	var is_board_targeted = $label_next_board/label_value.text == "any" || $label_next_board/label_value.text == str(board_number + 1)
-	var is_board_game_ended = boards_winner[board_number]
-	var is_game_over = (win_count_x >= 4) || (win_count_o >= 4)
+	var is_board_targeted = next_board_str == "any" || next_board_str == str(board_number + 1)
+	var is_board_game_ended = boards_winner_x[board_number] || boards_winner_o[board_number]
+	var is_game_over = check_win_condition_global() != "playing"
 	if is_button_empty && is_board_targeted && !is_board_game_ended && !is_game_over:
 		move(board_number, local_n)
 		handle_board_result(board_number)
@@ -189,16 +191,29 @@ func focus_on_board(board_number: int) -> void:
 	focused_board = board_number
 
 func handle_board_result(board_number: int) -> void:
-	var board_result = check_win_condition(board_number)
+	var board_result = check_win_condition_local(board_number)
 	if board_result == "x":
 		select_color_on_board(board_number, color0)
-		boards_winner[board_number] = "x"
 		win_count_x += 1
+		boards_winner_x[board_number] = true
 	else: if board_result == "o":
 		select_color_on_board(board_number, color1)
-		boards_winner[board_number] = "o"
 		win_count_o += 1
-	print_win_count()
+		boards_winner_o[board_number] = true
+	var result = check_win_condition_global()
+	if result == "x":
+		$label_result.text = "X won"
+	else: if result == "o":
+		$label_result.text = "O won"
+
+func has_array_winning_configuration(s: Array) -> bool:
+	print(s)
+	for i in range(9):
+		if ((s[0]&&s[1]&&s[2]) || (s[3]&&s[4]&&s[5]) || (s[6]&&s[7]&&s[8]) ||
+		(s[0]&&s[3]&&s[6]) || (s[1]&&s[4]&&s[7]) || (s[2]&&s[5]&&s[8])) ||(
+		(s[0]&&s[4]&&s[8]) || (s[2]&&s[4]&&s[6])):
+			return true
+	return false
 
 func import_KEN() -> void:
 	clear_all()
@@ -273,15 +288,6 @@ func print_KEN() -> String:
 	$label_KEN/value.text = line
 	return line
 
-func print_win_count() -> void:
-	$label_x_win_count.text = "X won " + str(win_count_x) + " times"
-	$label_o_win_count.text = "O won " + str(win_count_o) + " times"
-	
-	if win_count_x >= 3:
-		$label_result.text = "X wins"
-	else: if win_count_o >= 3:
-		$label_result.text = "O wins"
-
 func remove_focus_on_board(board_number: int) -> void:
 	var board_color = boards_color[board_number]
 	draw_bg_color(board_number, board_color)
@@ -296,7 +302,8 @@ func set_next_board() -> void:
 		var next_board_y = 2 - (int(last_move[1]) - 1) % 3
 		var next_board_number = next_board_x + next_board_y*3
 		
-		if check_full_board(next_board_number) || boards_winner[next_board_number]:
+		var is_board_game_over = boards_winner_x[next_board_number] || boards_winner_o[next_board_number]
+		if check_full_board(next_board_number) || is_board_game_over:
 			$label_next_board/label_value.text = "any"
 			remove_focus_on_board(focused_board)
 		else:
