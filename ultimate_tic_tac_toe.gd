@@ -9,7 +9,9 @@ var win_count_o = 0
 var who_turn = 'x'
 var focused_board = 0
 var last_move = ""
+
 var start_position = "9-9-9-9-9-9-9-9-9"
+var move_history = []
 
 var color0 = Color(0.275, 0.0, 0.0, 1.0)
 var color0_focused = Color(0.104, 0.0, 0.0, 1.0)
@@ -98,6 +100,7 @@ func clear_all() -> void:
 	field_x.create(Vector2i(9,9))
 	field_o.create(Vector2i(9,9))
 	last_move = ""
+	move_history.clear()
 	
 	var bg_color = color2
 	var style = StyleBoxFlat.new()
@@ -113,6 +116,7 @@ func clear_all() -> void:
 		boards_winner_o[n] = false
 		boards_color[n] = bg_color
 	print_KEN()
+	print_move_history()
 
 func click_button(board_number, local_n) -> void:
 	$option_board_number.select(board_number)
@@ -130,9 +134,11 @@ func click_button(board_number, local_n) -> void:
 	var is_game_over = check_win_condition_global() != "playing"
 	if is_button_empty && is_board_targeted && !is_board_game_ended && !is_game_over:
 		move(board_number, local_n)
+		move_history.append(last_move)
 		handle_board_result(board_number)
 		set_next_board()
 		print_KEN()
+		print_move_history()
 
 func draw_bg_color(board_number: int, bg_color: Color) -> void:
 	var buttons = $game_grid.get_child(board_number).get_children()
@@ -207,7 +213,6 @@ func handle_board_result(board_number: int) -> void:
 		$label_result.text = "O won"
 
 func has_array_winning_configuration(s: Array) -> bool:
-	print(s)
 	for i in range(9):
 		if ((s[0]&&s[1]&&s[2]) || (s[3]&&s[4]&&s[5]) || (s[6]&&s[7]&&s[8]) ||
 		(s[0]&&s[3]&&s[6]) || (s[1]&&s[4]&&s[7]) || (s[2]&&s[5]&&s[8])) ||(
@@ -287,6 +292,15 @@ func print_KEN() -> String:
 	line += " " + str(last_move)
 	$label_KEN/value.text = line
 	return line
+
+func print_move_history() -> void:
+	var output_history = ""
+	var move_count = move_history.size()
+	for move_pair in range((move_count + 1) / 2):
+		output_history += str(move_pair + 1) + ". " + move_history[move_pair*2]+ " "
+		if move_pair*2 + 1 <= move_count - 1:
+			output_history += move_history[move_pair*2 + 1]+ " "
+	$label_move_history/value.text = output_history
 
 func remove_focus_on_board(board_number: int) -> void:
 	var board_color = boards_color[board_number]

@@ -19,6 +19,7 @@ offset_left = 890.0
 offset_top = 16.0
 offset_right = 990.0
 offset_bottom = 56.0
+disabled = true
 text = "x"
 
 [node name="btn_clear" type="Button" parent="."]
@@ -29,10 +30,10 @@ offset_bottom = 56.0
 text = "Clear all"
 
 [node name="label_result" type="Label" parent="."]
-offset_left = 772.0
-offset_top = 160.0
-offset_right = 1129.0
-offset_bottom = 188.0
+offset_left = 873.0
+offset_top = 123.0
+offset_right = 1016.0
+offset_bottom = 151.0
 text = "Game in process"
 horizontal_alignment = 1
 
@@ -74,34 +75,52 @@ offset_bottom = 42.0
 text = "any"
 
 [node name="label_KEN" type="Label" parent="."]
-offset_left = 732.0
-offset_top = 183.0
-offset_right = 773.0
-offset_bottom = 206.0
+offset_left = 556.0
+offset_top = 193.0
+offset_right = 597.0
+offset_bottom = 216.0
 text = "KEN: "
 
 [node name="value" type="TextEdit" parent="label_KEN"]
 layout_mode = 0
-offset_left = 40.0
-offset_top = 7.0
-offset_right = 398.0
-offset_bottom = 98.0
+offset_left = 39.0
+offset_top = 2.0
+offset_right = 575.0
+offset_bottom = 64.0
 editable = false
 wrap_mode = 1
 
 [node name="textEdit_import_KEN" type="TextEdit" parent="."]
-offset_left = 772.0
-offset_top = 294.0
+offset_left = 595.0
+offset_top = 262.0
 offset_right = 1130.0
-offset_bottom = 394.0
+offset_bottom = 322.0
 wrap_mode = 1
 
 [node name="btn_import_KEN" type="Button" parent="."]
-offset_left = 906.0
-offset_top = 398.0
-offset_right = 1003.0
-offset_bottom = 429.0
+offset_left = 798.0
+offset_top = 327.0
+offset_right = 895.0
+offset_bottom = 358.0
 text = "Import KEN"
+
+[node name="label_move_history" type="Label" parent="."]
+offset_left = 536.0
+offset_top = 371.0
+offset_right = 595.0
+offset_bottom = 420.0
+text = "Move
+history:"
+horizontal_alignment = 1
+
+[node name="value" type="TextEdit" parent="label_move_history"]
+layout_mode = 0
+offset_left = 60.0
+offset_top = -3.0
+offset_right = 594.0
+offset_bottom = 195.0
+editable = false
+wrap_mode = 1
 
 [connection signal="pressed" from="btn_who_turn" to="." method="change_turn"]
 [connection signal="pressed" from="btn_clear" to="." method="clear_all"]
